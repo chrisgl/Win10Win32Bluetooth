@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.System;
 
 using Windows.Devices.Bluetooth.Advertisement;
 
-namespace ConsoleApplication1
+namespace Win10Win32Bluetooth
 {
     class Program
     {
@@ -47,10 +42,22 @@ namespace ConsoleApplication1
         private void OnAdvertisementReceived(BluetoothLEAdvertisementWatcher watcher, BluetoothLEAdvertisementReceivedEventArgs eventArgs)
         {
             // Tell the user we see an advertisement and print some properties
-            Console.WriteLine(String.Format("Advertisement:"));
-            Console.WriteLine(String.Format("  BT_ADDR: {0}", eventArgs.BluetoothAddress));
-            Console.WriteLine(String.Format("  FR_NAME: {0}", eventArgs.Advertisement.LocalName));
-            Console.WriteLine();
+            Console.WriteLine("Advertisement:");
+            Console.WriteLine($"  TIME:     {eventArgs.Timestamp}");
+            Console.WriteLine($"  ADVTYPE:  {eventArgs.AdvertisementType}");
+            Console.WriteLine($"  BT_ADDR:  {eventArgs.BluetoothAddress}");
+            Console.WriteLine($"  FR_NAME:  {eventArgs.Advertisement.LocalName}");
+            Console.WriteLine($"  STRENGTH: {eventArgs.RawSignalStrengthInDBm} DBm");
+            foreach (var serviceGUID in eventArgs.Advertisement.ServiceUuids)
+            {
+                Console.WriteLine($"  S_GUID:  {serviceGUID}");
+            }
+            foreach (var data in eventArgs.Advertisement.ManufacturerData)
+            {
+                Console.WriteLine($"  COMP_ID:  {data.CompanyId}");
+                Console.WriteLine($"  DATA_CAP: {data.Data.Capacity}");
+                Console.WriteLine($"  DATA_LEN: {data.Data.Length}");
+            }
         }
     }
 }
